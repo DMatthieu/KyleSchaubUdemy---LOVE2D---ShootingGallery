@@ -8,7 +8,7 @@ function love.load()
     target.radius = 50
 
     score = 0
-    timer = 0
+    timer = 10
 
     --set a default font with a size of 40
     gameFont = love.graphics.newFont(40)
@@ -16,6 +16,13 @@ function love.load()
 end
 
 function love.update(dt)
+    if timer > 0 then
+        timer = timer - dt
+    end
+    if timer < 0 then
+        timer = 0
+    end
+    
 
 end
 
@@ -26,6 +33,9 @@ function love.draw()
     love.graphics.setColor(1,1,1) --White
     love.graphics.setFont(gameFont)
     love.graphics.print(score, 0, 0)
+    --math.ceil = number rounded and truncated to the superior value 
+    --math.floor = number rounded and truncated to the inferior value 
+    love.graphics.print(math.ceil(timer), 300, 0)
 end
 
 function love.mousepressed( x, y, button, istouch, presses )
