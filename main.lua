@@ -46,10 +46,14 @@ function love.draw()
     
     
     love.graphics.setFont(gameFont)
-    love.graphics.print(score, 0, 0)
+    love.graphics.print("Score: "..score, 5, 5)
     --math.ceil = number rounded and truncated to the superior value 
     --math.floor = number rounded and truncated to the inferior value 
-    love.graphics.print(math.ceil(timer), 300, 0)
+    love.graphics.print("Time: "..math.ceil(timer), 300, 5)
+    if gameState == 1 then
+        --text, x, y, limit (en px avant wrapping), align, r, sx, sy, ox, oy, kx, ky
+        love.graphics.printf("Click anywhere to begin !", 0, 250, love.graphics.getWidth(), "center")
+    end
 
     --Si PArtie en cours...
     if gameState==2 then
