@@ -76,6 +76,22 @@ function love.mousepressed( x, y, button, istouch, presses )
             -- Random Position  (min, max). Include Target radius for targets uncted by the window border
             target.x = math.random(target.radius, love.graphics.getWidth() - target.radius)
             target.y = math.random(target.radius, love.graphics.getHeight() - target.radius)
+        elseif mouseToTarget > target.radius and score > 0 then
+            score = score - 1
+        end
+    end
+
+    if button == 2 and gameState == 2 then 
+        --CHECK DISTANCE
+        local mouseToTarget = distanceBetween(target.x, target.y, x, y)
+        if mouseToTarget < target.radius then
+            score = score + 2
+            timer = timer - 1
+            -- Random Position  (min, max). Include Target radius for targets uncted by the window border
+            target.x = math.random(target.radius, love.graphics.getWidth() - target.radius)
+            target.y = math.random(target.radius, love.graphics.getHeight() - target.radius)
+        elseif mouseToTarget > target.radius and score > 0 then
+            score = score - 1
         end
     end
 
