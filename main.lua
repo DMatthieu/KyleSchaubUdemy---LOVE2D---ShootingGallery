@@ -8,7 +8,9 @@ function love.load()
     target.radius = 50
 
     score = 0
-    timer = 10
+    timer = 0
+
+    gameState = 1
 
     --set a default font with a size of 40
     gameFont = love.graphics.newFont(40)
@@ -23,33 +25,46 @@ function love.load()
 end
 
 function love.update(dt)
-    if timer > 0 then
-        timer = timer - dt
-    end
-    if timer < 0 then
-        timer = 0
+    --si Partie en cours
+    if gameState == 2 then
+        --Si Timer Audessus de zero, alors poursuite du compte à rebours
+        if timer > 0 then
+            timer = timer - dt
+        end
+        --Si Timer < 0 alors reset Timer et switch de la scène à celle du GameMenu. Le score n'est pas reset.
+        if timer < 0 then
+            timer = 0
+            gameState = 1
+        end
     end
     
-
 end
 
 function love.draw()
 
     love.graphics.draw(sprites.sky, 0, 0)
-    love.graphics.draw(sprites.target, target.x, target.y, 0, 1, 1, sprites.target:getWidth()/2, sprites.target:getHeight()/2)
-    love.graphics.draw(sprites.crosshairs, love.mouse.getX(), love.mouse.getY(), 0, 1, 1, sprites.crosshairs:getWidth()/2, sprites.crosshairs:getHeight()/2)
     
-    love.graphics.setColor(1,1,1) --White
+    
     love.graphics.setFont(gameFont)
     love.graphics.print(score, 0, 0)
     --math.ceil = number rounded and truncated to the superior value 
     --math.floor = number rounded and truncated to the inferior value 
     love.graphics.print(math.ceil(timer), 300, 0)
 
+    --Si PArtie en cours...
+    if gameState==2 then
+        --Affichage targets
+        love.graphics.draw(sprites.target, target.x, target.y, 0, 1, 1, sprites.target:getWidth()/2, sprites.target:getHeight()/2)
+    end
+
+    --Affichage du Pointeur
+    love.graphics.draw(sprites.crosshairs, love.mouse.getX(), love.mouse.getY(), 0, 1, 1, sprites.crosshairs:getWidth()/2, sprites.crosshairs:getHeight()/2)
+
 end
 
 function love.mousepressed( x, y, button, istouch, presses )
-    if button == 1 then --Left Click
+    --Left Click ET partie en cours (gamestate == 2)
+    if button == 1 and gameState == 2 then 
         --CHECK DISTANCE
         local mouseToTarget = distanceBetween(target.x, target.y, x, y)
         if mouseToTarget < target.radius then
@@ -58,6 +73,13 @@ function love.mousepressed( x, y, button, istouch, presses )
             target.x = math.random(target.radius, love.graphics.getWidth() - target.radius)
             target.y = math.random(target.radius, love.graphics.getHeight() - target.radius)
         end
+    end
+
+    --Si clic gauche et MEnu de départ
+    if button == 1 and gameState == 1 then
+        gameState = 2 --Scène set à scène de jeu
+        timer = 10--reset timer
+        score = 0--reset score
     end
 end
 
