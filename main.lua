@@ -13,6 +13,13 @@ function love.load()
     --set a default font with a size of 40
     gameFont = love.graphics.newFont(40)
 
+    sprites = {}
+    sprites.crosshairs = love.graphics.newImage("sprites/crosshairs.png")
+    sprites.sky = love.graphics.newImage("sprites/sky.png")
+    sprites.target = love.graphics.newImage("sprites/target.png")
+
+    love.mouse.setVisible(false)
+
 end
 
 function love.update(dt)
@@ -27,15 +34,18 @@ function love.update(dt)
 end
 
 function love.draw()
-    love.graphics.setColor(1,0,0) -- Red
-    love.graphics.circle("fill", target.x, target.y, target.radius)
 
+    love.graphics.draw(sprites.sky, 0, 0)
+    love.graphics.draw(sprites.target, target.x, target.y, 0, 1, 1, sprites.target:getWidth()/2, sprites.target:getHeight()/2)
+    love.graphics.draw(sprites.crosshairs, love.mouse.getX(), love.mouse.getY(), 0, 1, 1, sprites.crosshairs:getWidth()/2, sprites.crosshairs:getHeight()/2)
+    
     love.graphics.setColor(1,1,1) --White
     love.graphics.setFont(gameFont)
     love.graphics.print(score, 0, 0)
     --math.ceil = number rounded and truncated to the superior value 
     --math.floor = number rounded and truncated to the inferior value 
     love.graphics.print(math.ceil(timer), 300, 0)
+
 end
 
 function love.mousepressed( x, y, button, istouch, presses )
